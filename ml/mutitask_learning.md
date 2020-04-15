@@ -197,6 +197,174 @@ def my_model(features, labels, mode, params):
 - [大牛1](http://wd1900.github.io/2019/09/15/Recommending-What-Video-to-Watch-Next-A-Multitask-Ranking-System/)
 - 
 
+### 
+
+### 4.Two MTL methods for Deep Learning
+
+#### Hard parameter sharing
+
+<img src="D:\gitrep\ml_theory\ml\mutitask_learning.assets\mtl_images-001-2.png" alt="img" style="zoom:50%;" />
+
+- 可以减少过拟合的风险，训练的任务越多，shared layer representation就必须cover 住所有任务
+
+#### Soft parameter sharing
+
+
+
+### 5. muti-task learning using uncertainty to weigh losses for scene Geometry and Semantics
+
+本小节主要推导一个多任务损失函数，这个损失函数利用同方差不确定性来最大化高斯似然估计。首先定义一个概率模型：
+$$
+p(y|f^{W}(x))=N(f^{W}(x),\sigma^2) \tag{2}
+$$
+这是对回归问题的规律模型定义，$f^{W}(x)$ 是神经网络的输出，$x$是输入数据，$W$是权重，
+
+对于分类问题，同上会将使用softmax 如：
+$$
+p(y|f^{W}(x))=softmax(f^{W}(x) \tag 3
+$$
+多任务的似然函数
+$$
+p(y_{1},····,y_{K}|f^{W}(x))=p(y_{1}|f^{W}(x))...p(y_{K}|f^{W}(x)) \tag 4
+$$
+其中，$y_{i}$ 是多任务中每个子任务的输出
+
+那么，极大似然估计就可以表示下式，（5）式也表明，该极大似然估计与右边成正比，其中，$\sigma$是高斯分布的标准差，也是作为模型的噪声，接下来的任务就是根据$W$和$\sigma$最大化似然分布
+
+<img src="D:\gitrep\ml_theory\ml\mutitask_learning.assets\v2-98b6f6ffb833528b5684187fc6ac092f_720w.png" alt="img" style="zoom:80%;" />
+
+以两个输出y1和y2为例：得到如（6）式高斯分布：
+
+<img src="D:\gitrep\ml_theory\ml\mutitask_learning.assets\v2-a18066b842582cb6d914b8ae92402ba5_720w.jpg" alt="img" style="zoom:80%;" />
+
+则此时的极大似然估计为（7）式：
+
+<img src="D:\gitrep\ml_theory\ml\mutitask_learning.assets\v2-66c43223c3b317f841efdae456f3c425_720w.jpg" alt="img" style="zoom:80%;" />
+
+可以看到，最后一步中用损失函数替换了y和f的距离计算，即：
+
+<img src="D:\gitrep\ml_theory\ml\mutitask_learning.assets\v2-4068c22ad539576138c62a63398ace3d_720w.png" alt="img" style="zoom:80%;" />
+
+同理可知$L_{2}$
+
+**继续分析（7）式子可得，我们的任务是最小化这个极大似然估计，所以，当σ（噪声）增大时，相对应的权重就会降低；另一方面，随着噪声σ减小，相对应的权重就要增加**
+
+接下来，将分类问题也考虑上，分类问题一般加一层softmax，如（8）式所示：
+
+<img src="D:\gitrep\ml_theory\ml\mutitask_learning.assets\v2-2fd2931161cd418976b678466565d86c_720w.png" alt="img" style="zoom:80%;" />
+
+那么softmax似然估计为
+
+<img src="D:\gitrep\ml_theory\ml\mutitask_learning.assets\v2-a00e622cca3175f72e965cff39c715de_720w.jpg" alt="img" style="zoom:80%;" />
+
+接下来考虑这种情况：模型的两个输出，一个是连续型y1，另一个是独立型y2，分别用高斯分布和softmax分布建模，可得（10）式：
+
+<img src="D:\gitrep\ml_theory\ml\mutitask_learning.assets\v2-8900c5b0d73d6a413deb1ff5987b55c4_720w.jpg" alt="img" style="zoom:80%;" />
+
+同理，
+
+<img src="D:\gitrep\ml_theory\ml\mutitask_learning.assets\v2-c4816c720e65d6613b48f8c9a4ed463b_720w.png" alt="img" style="zoom:80%;" />
+
+L2（W）替换为：
+
+<img src="D:\gitrep\ml_theory\ml\mutitask_learning.assets\v2-28556f3ceac83f0ace7ce7edd2c42878_720w.png" alt="img" style="zoom:80%;" />
+
+
+
+
+
+#### 关键的概念：
+
+- ### **[不确定性的类型](https://www.leiphone.com/news/201808/P6pPRMWpNt4dHCk0.html)**
+
+  模型不确定性，也就是**认知不确定性**（Epistemic uncertainty）：假设你只有一个数据点，并且你还想知道哪种线性模型最能解释你的数据。但实际情况是，这时你是无法确定哪条线是正确的——我们需要更多的数据！
+
+  <img src="D:\gitrep\ml_theory\ml\mutitask_learning.assets\5b668352892f5.jfif" alt="模型可解释性差？你考虑了各种不确定性了吗？" style="zoom:50%;" />
+
+  左边：数据不足导致了高度不确定性。右边：数据越多不确定性越小。
+
+  **认知不确定性解释了模型参数的不确定性**。我们并不确定哪种模型权重能够最好地描述数据，但是拥有更多的数据却能降低这种不确定性。这种不确定性在**高风险应用和处理小型稀疏数据**时非常重要
+
+  ![模型可解释性差？你考虑了各种不确定性了吗？](D:\gitrep\ml_theory\ml\mutitask_learning.assets\5b668364a0422.jfif)
+
+  举个例子，假设你想要建立一个能够判断输入图像中的动物是否有可能会吃掉你的模型。然后你的模型只在包含了狮子和长颈鹿的数据集上进行训练，而现在给出一张僵尸的图片作为输入。由于该模型没有学习过僵尸的图片，因此预测结果的不确定性会很高。这种不确定性属于模型的结果，然后如果**你在数据集中给出了更多的僵尸图片，那么模型的不确定性将会降低。**
+
+**数据不确定性**或者称为随机不确定性（**Aleatoric uncertainty**），**指的是观测中固有的噪音。有时事件本身就是随机的，所以在这种情况下，获取更多的数据对我们并没有帮助，因为噪声属于数据固有的。**
+
+为了理解这一点，让我们回到判别食肉动物的模型中。我们的模型可以判断出一张图像中存在狮子，因此会预测出你可能被吃掉。但是，如果狮子现在并不饿呢？这种不确定性就来自于数据。另一个例子则是，有两条看起来一样的蛇，但是其中一条有毒，另一条则没有毒。
+
+随机不确定性可以分为两类：
+
+1. 同方差不确定性（Homoscedastic uncertainty）：这时所有输入具有**相同的不确定性**，数据不存在较为特殊的样例
+2. 异方差不确定性（Heteroscedastic uncertainty）：这种不确定性取决于具体的输入数据。例如，对于预测图像中深度信息的模型，毫无特征的平面墙（Featureless wall）将比拥有强消失线（Vanishing lines）的图像具有更高的不确定性。
+
+**测量不确定性（Measurement uncertainty）**：另一个不确定性的来源是测量本身。当测量存在噪声时，不确定性将增加。在上述判别食肉动物的模型中，如果某些图像是通过质量较差的摄像机拍摄的话，那么就有可能会损害模型的置信度。或者在拍摄一只愤怒河马的过程中，由于我们是边跑边拍的，结果导致了成像模糊。
+
+**标签噪声（Noisy labels）**：在监督学习中我们使用标签来训练模型。而如果标签本身带有噪声，那么不确定性也会增加。
+
+不过当前也存在许多方法可以实现对各种类型的不确定性进行建模。这些方法将在本系列的后续文章中进行介绍。现在，假设有一个黑盒模型暴露了自己对预测结果的不确定性，那我们该如果借助这点来调试模型呢？
+
+![在这里插入图片描述](D:\gitrep\ml_theory\ml\mutitask_learning.assets\2019011818571168.png)
+
+
+
+#### reference
+
+- [利用不确定性来衡量多任务学习中的损失函数](https://zhuanlan.zhihu.com/p/65137250)
+
+
+
+
+
+### 6. [A survey on multi-task learning](https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1707.08114)
+
+![img](D:\gitrep\ml_theory\ml\mutitask_learning.assets\v2-3f0b1fb2eaf12571d0576a3428c610ec_1440w.jpg)
+
+与标准的单任务相比，在学习共享表示的同时训练多个任务有两个主要挑战：
+
+- **Loss Function(how to balance tasks)：**多任务学习的损失函数，**对每个任务的损失进行权重分配**，在这个过程中，必须保证所有任务同等重要，而不能让简单任务主导整个训练过程。手动的设置权重是低效而且不是最优的，因此，**自动的学习这些权重或者设计一个对所有权重具有鲁棒性的网络是十分必要和重要的**。
+- **Network Architecture(how to share)：**一个高效的多任务网络结构，必须同时兼顾特征共享部分和任务特定部分，既需要学习任务间的泛化表示（避免过拟合），也需要学习每个任务独有的特征（避免欠拟合）。
+
+#### 1. Auxiliary Learning(辅助学习)
+
+除了同时学习多个任务，在有些情况下，我们的关注点只是多任务中的一个或者几个任务的表现。为了更好的理解任务之间的相关性，我们可以通过设置带有各种属性的辅助任务来进行。*辅助任务的目的就是协助我们找到一个更强大，更具有鲁棒性的特征表示，最终让主要任务受益*。关于辅助任务的定义，我们可以根据上文的多任务定义进行延伸，如下表示：
+
+![img](D:\gitrep\ml_theory\ml\mutitask_learning.assets\v2-b24605b011170bf4713269b92f516336_1440w.png)
+
+#### 2.Multi-Task Framework Design
+
+**Q：How to properly balance different types of tasks such that training multi-task networks will not be dominated by the easier task(s)?**
+
+分析：第一个问题是，在设计多任务网路过程中，我们如何平衡不同类型的任务，避免在训练过程中，整个网络被简单任务主导，导致任务之间的性能差异巨大。这就涉及到为不同任务的loss function赋上不同的权重，将不同task之间的loss统一成一个损失函数，如果只是简单的将不同任务的loss相加，这样会造成最终模型在有些任务上表现很好，在有的任务上大失水准。背后的原因是不同任务的不同损失函数尺度有很大的差异，因此需要考虑用权值将每个损失函数的尺度统一。
+
+**A：**针对这个问题，最新的解决办法是cvpr2018的一个工作《[Multi-Task Learning Using Uncertainty to Weigh Losses for Scene Geometry and Semantics](https://link.zhihu.com/?target=http%3A//openaccess.thecvf.com/content_cvpr_2018/html/Kendall_Multi-Task_Learning_Using_CVPR_2018_paper.html)》，这篇文章提出，将不同的loss拉到统一尺度下，这样就容易统一，具体的办法就是利用同方差的不确定性，将不确定性作为噪声，进行训练，详细的讲解可以看我专栏文章：
+
+这里在简单的讲一下同方差的不确定性（Homoscedastic Uncertainty）:属于偶然不确定性，这种不确定性捕捉了不同任务之间的相关性置信度，这种不确定性可以作为不同任务loss赋值的衡量标准。
+
+![img](D:\gitrep\ml_theory\ml\mutitask_learning.assets\v2-dac4133d643492318319155746fd7489_1440w.jpg)
+
+其中，Fw是神经网络的输出，在一个有K个任务的模型中，似然估计可以表示为通过概率累乘得到，则极大似然估计可以写成：
+
+![img](D:\gitrep\ml_theory\ml\mutitask_learning.assets\v2-db3bc1979fe6fd08c42ae2ca02f1e7d3_1440w.jpg)
+
+其中，σ类似神经网络的参数w，都是可以通过反向传播进行更新，表示的是每个任务输出的置信度。分析上式可知，如果σ增加，相对应的任务loss的权重就会减小，这样就实现了权重的动态规划
+
+**Q：How to build a multi-task learning architecture which is easy to train,parameter-efficient and robust to task weighting?**
+
+分析：如何构建一个统一，易训练，高鲁棒的多任务网络，有多种思想，但是，一个优秀的多任务网络应该具备：(1)特征共享部分和任务特定部分都能自动学习（2）对损失函数权重的选择上更robust
+
+**A：**如下图所示，关于特征共享表示，一般有两种方法，Hard-parameter sharing和soft-parameter-sharing。hard-parameter sharing有一组相同的特征共享层，这种设计大大减少了过拟合的风险；soft-parameter sharing每一个任务都有自己的特征参数和每个子任务之间的约束，这种设计更robust。
+
+![img](D:\gitrep\ml_theory\ml\mutitask_learning.assets\v2-0bf7a60b5e8f4833095d668a611c5ecd_1440w.jpg)
+
+当下最主流的框架都是两种框架的结合，通过结合，能够找到特征共享部分和特定任务部分很好的协调，下面介绍常见的多任务网络的结构设计：
+
+**Fusion Network**是一种通用的特征学习网络，每个任务的上层共享表示是通过学习特定任务的参数，将所有任务的低层特征表示通过线性组合表示出来。代表的网络结构有“Cross-Stitch Network”十字绣网络，了解更多关于该网络，可以去看[论文原文](https://link.zhihu.com/?target=https%3A//www.cv-foundation.org/openaccess/content_cvpr_2016/html/Misra_Cross-Stitch_Networks_for_CVPR_2016_paper.html)。（论文解读可以看我的专栏文章，[点我跳转](https://zhuanlan.zhihu.com/p/63425561)）
+
+
+
+
+
 
 
 ## Rerference
@@ -205,4 +373,6 @@ def my_model(features, labels, mode, params):
 - [深度学习（三十四）——深度推荐系统](http://www.jeepxie.net/article/79835.html)
 - [从技术角度聊聊，短视频为何让人停不下来？](https://zhuanlan.zhihu.com/p/42777502):smile:
 - [利用 TensorFlow 一步一步构建一个多任务学习模型](https://blog.csdn.net/CoderPai/article/details/80087188)
+- [An Overview of Multi-Task Learning in Deep Neural Networks](https://ruder.io/multi-task/)
+- [Multi-task Learning(Review)多任务学习概述](https://zhuanlan.zhihu.com/p/59413549):confounded:
 
