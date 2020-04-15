@@ -946,6 +946,77 @@ class LRUCache(OrderedDict):
 
 - [hashmap+双向链表](https://leetcode-cn.com/problems/lru-cache/solution/shu-ju-jie-gou-fen-xi-python-ha-xi-shuang-xiang-li/)
 
+### 20. 二分查找
+
+```python
+def binary_search(arr,item):
+    n=len(arr)
+    if n>0:
+        mid=n//2
+        if arr[mid]==item:
+            return True
+        elif arr[mid]<item:
+            return binary_search(arr[mid+1:],item)
+        else:
+            return binary_search(arr[:mid],item)
+    return False
+def binary_search(arr,item):
+    
+    n=len(arr)
+    if n<0:
+        return False
+    
+    start=0
+    end=n-1
+    while start<end:
+        mid=(start+end)//2
+        if arr[mid]==item:
+            return True
+        elif arr[mid]<item:
+            start=mid+1
+        else:
+            end=mid
+    return False
+
+```
+
+### 21. 循环数组查找
+
+```
+输入:nums = [4,5,6,7,0,1,2], target = 0
+输出: 4
+```
+
+```python
+class Solution:
+    def search(self, nums: List[int], target: int) -> int:
+        if len(nums) == 0:
+            return -1
+        left, right = 0, len(nums)-1
+        while left + 1 < right:
+            mid = (left + right) // 2
+            if nums[mid] == target:
+                return mid
+            if nums[left] < nums[mid]:
+                if nums[left] <= target and target <= nums[mid]:
+                    right = mid
+                else:
+                    left = mid
+            else:
+                if nums[mid] <= target and target <= nums[right]:
+                    left = mid
+                else:
+                    right = mid
+        if nums[left] == target:
+            return left
+        if nums[right] == target:
+            return right
+        return -1
+
+```
+
+![image-20200330175321658](Leetcode 笔记.assets/image-20200330175321658.png)
+
 ## rerference 
 
 - [leetcode ](https://github.com/luliyucoordinate/Leetcode)
