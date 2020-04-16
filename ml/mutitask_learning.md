@@ -361,6 +361,20 @@ L2（W）替换为：
 
 **Fusion Network**是一种通用的特征学习网络，每个任务的上层共享表示是通过学习特定任务的参数，将所有任务的低层特征表示通过线性组合表示出来。代表的网络结构有“Cross-Stitch Network”十字绣网络，了解更多关于该网络，可以去看[论文原文](https://link.zhihu.com/?target=https%3A//www.cv-foundation.org/openaccess/content_cvpr_2016/html/Misra_Cross-Stitch_Networks_for_CVPR_2016_paper.html)。（论文解读可以看我的专栏文章，[点我跳转](https://zhuanlan.zhihu.com/p/63425561)）
 
+### 7.多任务学习有效的原因
+
+（1）多个相关任务放在一起学习，有相关的部分，但也有不相关的部分。当学习一个任务（Main task）时，与该任务不相关的部分，在学习过程中相当于是噪声，因此，引入噪声可以提高学习的泛化（generalization）效果。
+
+（2)  单任务学习时，梯度的反向传播倾向于陷入局部极小值。多任务学习中不同任务的局部极小值处于不同的位置，通过相互作用，可以帮助隐含层逃离局部极小值。
+
+（3）添加的任务可以改变权值更新的动态特性，可能使网络更适合多任务学习。比如，多任务并行学习，提升了浅层共享层（shared representation）的学习速率，可能，较大的学习速率提升了学习效果。
+
+（4）多个任务在浅层共享表示，可能削弱了网络的能力，降低网络过拟合，提升了泛化效果。
+
+还有很多潜在的解释，为什么多任务并行学习可以提升学习效果（performance）。多任务学习有效，是因为它是建立在多个相关的，具有共享表示（shared representation）的任务基础之上的，因此，需要定义一下，什么样的任务之间是相关的。
+
+
+
 
 
 
@@ -375,4 +389,5 @@ L2（W）替换为：
 - [利用 TensorFlow 一步一步构建一个多任务学习模型](https://blog.csdn.net/CoderPai/article/details/80087188)
 - [An Overview of Multi-Task Learning in Deep Neural Networks](https://ruder.io/multi-task/)
 - [Multi-task Learning(Review)多任务学习概述](https://zhuanlan.zhihu.com/p/59413549):confounded:
+- [极大似然估计](https://blog.csdn.net/zengxiantao1994/article/details/72787849)
 
