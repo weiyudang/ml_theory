@@ -22,14 +22,29 @@
 
 - 数据过大需要用tfrecord和多线程队列减少io时间
 
-- 
+- Item2vec 摒弃时间窗口有以下几问题
+
+  1. 时间窗口的局部性  对推荐效果的影响，与推荐的具体场景应当相关，假如每个item seq 都是代表用户短期的用户偏好，则两者差异较小否则两者差异相对较大，item2vec 跟关注于全局性，word2vec 更关注于局部
+
+
+- Node2vec 的同质性和结构性的理解 p115 
+
+- [estimator load pretrain word embedding ](https://androidkt.com/pre-trained-word-embedding-tensorflow-using-estimator-api/)
+
+- 局部敏感哈希 固定间隔的超平面将向量空间分割成不同的哈希桶  p125
+
+- EGES 基于知识图谱训练完embedding 然后把基于行为或者其他信息进行训练会不会导致于word2vec 得出相似的embedding ,先验知识是固定的 
 
   
 
   
 
   
-
   
-
+  
+  
+  
+  
+  
+  
   
