@@ -170,3 +170,10 @@ $$e^{z_{illegal}} \to 0 $$
 
 都是避免过拟合，前者通过控制信噪比压缩互信息增加泛化能力，后者限制参数在Loss等高线上的可取值范围
 
+
+
+
+
+##  reference
+
+- [PTMs: Pre-trained-Models in NLP](https://github.com/loujie0822/Pre-trained-Models)

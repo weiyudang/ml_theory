@@ -391,3 +391,8 @@ L2（W）替换为：
 - [Multi-task Learning(Review)多任务学习概述](https://zhuanlan.zhihu.com/p/59413549):confounded:
 - [极大似然估计](https://blog.csdn.net/zengxiantao1994/article/details/72787849)
 
+**推荐排序**
+
+- [知乎推荐页Ranking经验分享](https://mp.weixin.qq.com/s?__biz=MzU1NTMyOTI4Mw==&mid=2247487240&idx=1&sn=f38e4a5cd73a2d2f1d52ee5eda418528&chksm=fbd4bd64cca334720629ba997aca98642bc1e1b25c422623ddf07e30cb9a5f5068cf22af0048&scene=21#wechat_redirect)
+- [机器学习爱好者](https://zhuanlan.zhihu.com/fengdu78)
+
