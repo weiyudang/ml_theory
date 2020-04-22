@@ -35,6 +35,20 @@
 
 - EGES 基于知识图谱训练完embedding 然后把基于行为或者其他信息进行训练会不会导致于word2vec 得出相似的embedding ,先验知识是固定的 
 
+- 模型优化和应用场景的统一性 p150
+
+- 加权逻辑回归
+
+- 主动学习 解决冷启动问题 p161 
+
+- 探索和利用 p165. :confused:
+
+- 预训练embedding + 轻量级线上模型 双塔 p204
+
+- 评估指标 MAPE mAP p216
+
+- AB test **interleaving** p231
+
   
 
   
