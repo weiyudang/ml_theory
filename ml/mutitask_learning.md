@@ -197,8 +197,6 @@ def my_model(features, labels, mode, params):
 - [大牛1](http://wd1900.github.io/2019/09/15/Recommending-What-Video-to-Watch-Next-A-Multitask-Ranking-System/)
 - 
 
-### 
-
 ### 4.Two MTL methods for Deep Learning
 
 #### Hard parameter sharing

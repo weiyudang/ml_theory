@@ -141,7 +141,7 @@ $$PE_{(pos,2i)} = sin(pos / 10000^{2i/d_{\text{model}}}) \quad PE_{(pos,2i+1)} =
 
 ### 16. $self \ attention \ mechanism$, **自注意力机制**;
 
-![attention_1](NLP 相关问题.assets/attention_1.jpg)
+![attention_0](NLP 相关问题.assets/attention_0.jpg)![attention_1](NLP 相关问题.assets/attention_1.jpg)
 
 ### 17.Attention Mask
 
